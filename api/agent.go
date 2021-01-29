@@ -738,6 +738,19 @@ func (a *Agent) ServiceDeregister(serviceID string) error {
 	return nil
 }
 
+// ServiceDeregisterOpts is used to deregister a service with
+// the local agent with query options.
+func (a *Agent) ServiceDeregisterOpts(serviceID string, q *QueryOptions) error {
+	r := a.c.newRequest("PUT", "/v1/agent/service/deregister/"+serviceID)
+	r.setQueryOptions(q)
+	_, resp, err := requireOK(a.c.doRequest(r))
+	if err != nil {
+		return err
+	}
+	resp.Body.Close()
+	return nil
+}
+
 // PassTTL is used to set a TTL check to the passing state.
 //
 // DEPRECATION NOTICE: This interface is deprecated in favor of UpdateTTL().
